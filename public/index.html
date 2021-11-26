@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="You can't download this image" />
+    <meta
+      property="og:description"
+      content="You think that saving images from the web is as easy as a right click and Save Image, hmm? Well, this website should give you a run for your money"
+    />
+    <meta
+      property="og:image"
+      content="https://youcantdownloadthisimage.online/thumb.png"
+    />
     <title>You can't download this image!</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Alegreya:ital@0;1&family=Rye&display=swap"
@@ -20,7 +29,7 @@
       </div>
       <figure class="image-box fx c hcenter">
         <img src="lisa.jpg" alt="Mona Lisa" />
-        <figcaption>Try Right click > Save Image As..</figcaption>
+        <figcaption></figcaption>
       </figure>
       <div class="para">
         Assuming you've just given it a go, you're probably being confronted
@@ -30,9 +39,23 @@
       <details>
         <summary>The answer</summary>
         <div class="para">
-          Or can you? Go ahead and try downloading the lovely Mona Lisa from
-          below:
+          When you usually try to download an image, your browser opens a
+          connection to the server and sends a GET request asking for the image.
+          The server responds with the image and closes the connection.
         </div>
+        <div class="para">
+          Here however, the server sends the image, but doesn't close the
+          connection! It keeps the connection open and sends bits of data
+          periodically to make sure it stays open. So your browser thinks that
+          the image is still being sent over, which is why the download seems to
+          be going on infinitely.
+        </div>
+        <a
+          class="para"
+          href="https://github.com/radiantly/you-cant-download-this-image"
+        >
+          Find this project on GitHub
+        </a>
       </details>
     </div>
   </body>

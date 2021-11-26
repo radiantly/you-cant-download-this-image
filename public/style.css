@@ -7,6 +7,7 @@
 :root {
   --dark-brown: #421e0a;
   --brown: #664e40;
+  --lighter-brown: #9d7c68;
 }
 
 .fx {
@@ -37,11 +38,12 @@ body {
 body {
   color: var(--brown);
   font-family: Alegreya;
+  overflow-y: scroll;
 }
 
 .main-container {
   padding: 10vh 0;
-  max-width: 700px;
+  width: min(700px, 90vw);
 }
 
 .title {
@@ -67,4 +69,45 @@ body {
 .image-box > figcaption {
   text-align: center;
   font-style: italic;
+}
+
+.image-box > figcaption::after {
+  content: "Try Right click > Save Image As..";
+}
+
+@media (pointer: coarse) {
+  .image-box > figcaption::after {
+    content: "Long-press image > Save Image..";
+  }
+}
+
+details {
+  margin-top: 10px;
+}
+
+details > summary {
+  cursor: pointer;
+}
+
+details > .para {
+  padding: 10px 0;
+}
+
+details > a {
+  text-decoration: underline dotted;
+  color: var(--lighter-brown);
+}
+
+details > a:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 600px) {
+  .main-container {
+    padding: 5vh 0;
+  }
+  .para {
+    font-size: 20px;
+    line-height: 30px;
+  }
 }
