@@ -81,71 +81,73 @@ async fn handle_request(req: Request<Body>) -> Result<Response<Body>, Infallible
 #[tokio::main]
 async fn main() {
     // We'll bind to 127.0.0.1:3000
-    let addr = SocketAddr::from(([0, 0, 0, 0], 443));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
 
-    thread::spawn(|| {
-        let calc_wait_time = || {
-            let mut vec_g = SENDERS.lock().unwrap();
-            let vec = &mut *vec_g;
-            if let Some((mut chan, _)) = vec.pop_front() {
-                if chan.try_send_data("hi there".into()).is_ok() {
-                    vec.push_back((chan, time_now()));
-                }
+    // thread::spawn(|| {
+    //     let calc_wait_time = || {
+    //         let mut vec_g = SENDERS.lock().unwrap();
+    //         let vec = &mut *vec_g;
+    //         if let Some((mut chan, _)) = vec.pop_front() {
+    //             if chan.try_send_data("hi there".into()).is_ok() {
+    //                 vec.push_back((chan, time_now()));
+    //             }
 
-                if let Some((_, last_send)) = vec.front() {
-                    return max(last_send + 10000 - time_now(), 0);
-                }
-            }
-            5000
-        };
+    //             if let Some((_, last_send)) = vec.front() {
+    //                 return max(last_send + 10000 - time_now(), 0);
+    //             }
+    //         }
+    //         5000
+    //     };
 
-        loop {
-            thread::sleep(Duration::from_millis(calc_wait_time() as u64));
-        }
-    });
+    //     loop {
+    //         thread::sleep(Duration::from_millis(calc_wait_time() as u64));
+    //     }
+    // });
 
     // println!("{:?}", *STATIC_FILES);
 
     let make_svc =
         make_service_fn(|_conn| async { Ok::<_, Infallible>(service_fn(handle_request)) });
 
-    let tls_cfg = {
-        // Load public certificate.
-        let certs =
-            load_certs("/etc/letsencrypt/live/youcantdownloadthisimage.online/fullchain.pem")
-                .unwrap();
-        // Load private key.
-        let key =
-            load_private_key("/etc/letsencrypt/live/youcantdownloadthisimage.online/privkey.pem")
-                .unwrap();
-        // Do not use client certificate authentication.
-        let mut cfg = rustls::ServerConfig::builder()
-            .with_safe_defaults()
-            .with_no_client_auth()
-            .with_single_cert(certs, key)
-            .unwrap();
-        cfg.alpn_protocols = vec![b"h2".to_vec(), b"http/1.1".to_vec()];
-        Arc::new(cfg)
-    };
+    // let tls_cfg = {
+    //     // Load public certificate.
+    //     let certs =
+    //         load_certs("/etc/letsencrypt/live/youcantdownloadthisimage.online/fullchain.pem")
+    //             .unwrap();
+    //     // Load private key.
+    //     let key =
+    //         load_private_key("/etc/letsencrypt/live/youcantdownloadthisimage.online/privkey.pem")
+    //             .unwrap();
+    //     // Do not use client certificate authentication.
+    //     let mut cfg = rustls::ServerConfig::builder()
+    //         .with_safe_defaults()
+    //         .with_no_client_auth()
+    //         .with_single_cert(certs, key)
+    //         .unwrap();
+    //     cfg.alpn_protocols = vec![b"h2".to_vec(), b"http/1.1".to_vec()];
+    //     Arc::new(cfg)
+    // };
 
-    let tcp = TcpListener::bind(&addr).await.unwrap();
-    let tls_acceptor = TlsAcceptor::from(tls_cfg);
+    // let tcp = TcpListener::bind(&addr).await.unwrap();
+    // let tls_acceptor = TlsAcceptor::from(tls_cfg);
 
-    let incoming_tls_stream = stream! {
-        loop {
-            let (socket, _) = tcp.accept().await?;
-            let stream = tls_acceptor.accept(socket);
+    // let incoming_tls_stream = stream! {
+    //     loop {
+    //         let (socket, _) = tcp.accept().await?;
+    //         let stream = tls_acceptor.accept(socket);
 
-            let s = stream.await;
-            // Ignore errors
-            if s.is_ok() {
-                yield s
-            }
-        }
-    };
+    //         let s = stream.await;
+    //         // Ignore errors
+    //         if s.is_ok() {
+    //             yield s
+    //         }
+    //     }
+    // };
 
-    let acceptor = accept::from_stream(incoming_tls_stream);
-    let server = Server::builder(acceptor).serve(make_svc);
+    // let acceptor = accept::from_stream(incoming_tls_stream);
+    // let server = Server::builder(acceptor).serve(make_svc);
+
+    let server = Server::bind(&addr).serve(make_svc);
 
     // Run this server for... forever!
     if let Err(e) = server.await {
