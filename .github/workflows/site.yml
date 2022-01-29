@@ -1,0 +1,11 @@
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  site_check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if site is up
+        run: curl https://youcantdownloadthisimage.online/ | grep Lisa
