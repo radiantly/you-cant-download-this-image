@@ -1,5 +1,7 @@
 # You can't download this image
 
+![Site uptime check](https://github.com/radiantly/you-cant-download-this-image/actions/workflows/site.yml/badge.svg)
+
 Or can you? Visit https://youcantdownloadthisimage.online/ to give it a go!
 
 ## Running your own server
@@ -93,3 +95,5 @@ server {
 ## License
 
 MIT
+
+[![Powered by DigitalOcean](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=b907b37883ce&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)

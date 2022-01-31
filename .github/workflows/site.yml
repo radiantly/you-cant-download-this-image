@@ -1,3 +1,5 @@
+name: Site status
+
 on:
   schedule:
     - cron: "0 0 * * *"
