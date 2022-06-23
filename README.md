@@ -2,7 +2,7 @@
 
 ![Site uptime check](https://github.com/radiantly/you-cant-download-this-image/actions/workflows/site.yml/badge.svg)
 
-Or can you? Visit https://youcantdownloadthisimage.online/ to give it a go!
+Or can you? Visit https://youcantdownloadthisimage.club/ to give it a go!
 
 ## Running your own server
 
@@ -57,12 +57,12 @@ Finally, something like this can be added to the nginx config:
 
 ```
 server {
-    if ($host = www.youcantdownloadthisimage.online) {
+    if ($host = www.youcantdownloadthisimage.club) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
 
-    if ($host = youcantdownloadthisimage.online) {
+    if ($host = youcantdownloadthisimage.club) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
@@ -72,20 +72,20 @@ server {
 server {
     listen 443 ssl;
     root /root/you-cant-download-this-image/public;
-    server_name youcantdownloadthisimage.online www.youcantdownloadthisimage.online;
-    ssl_certificate /etc/letsencrypt/live/youcantdownloadthisimage.online/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/youcantdownloadthisimage.online/privkey.pem; # managed by Certbot
+    server_name youcantdownloadthisimage.club www.youcantdownloadthisimage.club;
+    ssl_certificate /etc/letsencrypt/live/youcantdownloadthisimage.club/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/youcantdownloadthisimage.club/privkey.pem; # managed by Certbot
 
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
 
     location / {
         add_header X-Frame-Options "SAMEORIGIN";
-        add_header Access-Control-Allow-Origin https://youcantdownloadthisimage.online;
+        add_header Access-Control-Allow-Origin https://youcantdownloadthisimage.club;
     }
 
     location /lisa.jpg {
         proxy_pass              http://localhost:3000;
-        proxy_redirect          http://localhost:3000 https://youcantdownloadthisimage.online;
+        proxy_redirect          http://localhost:3000 https://youcantdownloadthisimage.club;
     }
 }
 ```

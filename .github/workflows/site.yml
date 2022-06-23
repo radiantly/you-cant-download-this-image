@@ -10,4 +10,4 @@ jobs:
 
     steps:
       - name: Check if site is up
-        run: curl https://youcantdownloadthisimage.online/ | grep Lisa
+        run: curl https://youcantdownloadthisimage.club/ | grep Lisa
