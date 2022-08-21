@@ -44,7 +44,7 @@ std::vector<int> clientfds;
 std::mutex fd_queue_mutex;
 
 int sendall(const int sockfd, const std::string& data) {
-    int bytes_sent{}, result{};
+    size_t bytes_sent{}, result{};
     while (bytes_sent < data.size()) {
         result = send(sockfd, data.data() + bytes_sent, data.size() - bytes_sent, MSG_NOSIGNAL);
         if (result <= 0) break;
@@ -129,7 +129,7 @@ int main() {
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
 
-    if (status = getaddrinfo(NULL, PORT, &hints, &res)) {
+    if ((status = getaddrinfo(NULL, PORT, &hints, &res))) {
         std::cout << "getaddrinfo error " << gai_strerror(status) << std::endl;
         exit(1);
     }
