@@ -1,0 +1,12 @@
+[Unit]
+Description=You can't download this image server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/you-cant-download-this-image
+ExecStart=/opt/you-cant-download-this-image/serve
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

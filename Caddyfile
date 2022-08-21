@@ -1,0 +1,6 @@
+www.youcantdownloadthisimage.com, youcantdownloadthisimage.com {
+	root * /opt/you-cant-download-this-image/public
+	encode zstd gzip
+	file_server
+	reverse_proxy /lisa.jpg localhost:3000
+}
