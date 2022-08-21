@@ -2,92 +2,44 @@
 
 ![Site uptime check](https://github.com/radiantly/you-cant-download-this-image/actions/workflows/site.yml/badge.svg)
 
-Or can you? Visit https://youcantdownloadthisimage.club/ to give it a go!
+Or can you? Visit https://youcantdownloadthisimage.com/ to give it a go!
 
 ## Running your own server
 
 If you'd just like to test the code that keeps the connection open, run the following
 
 ```sh
-# Install dependencies and start serving lisa.jpg on http://localhost:3000/
-cargo run
+# Build and start serving lisa.jpg on http://localhost:3000/
+make
+./serve
 ```
 
 <details>
 <summary>Full setup</summary>
-The following assumes that you have nginx installed on a linux system with systemd.
+The following assumes that you have [caddy](https://caddyserver.com/) installed with systemd.
 
 ```sh
-# Clone this repository
-git clone https://github.com/radiantly/you-cant-download-this-image
-cd you-cant-download-this-image
-
-# Release build
-cargo build --release
+cd /opt                                                                # Navigate to /opt
+git clone https://github.com/radiantly/you-cant-download-this-image    # Clone repository
+chown -R root:caddy you-cant-download-this-image/                      # Set permissions: root owner, caddy group
+cd you-cant-download-this-image && make                                # Build
 ```
 
-Create a systemd unit file to keep it running:
-
-These are the contents of `/etc/systemd/system/lisa.service` _(replace paths as needed)_
-
-```
-[Unit]
-Description=You can't download this image server
-After=network.target
-
-[Service]
-Type=simple
-WorkingDirectory=/root/you-cant-download-this-image
-ExecStart=/root/you-cant-download-this-image/target/release/you-cant-download-this-image
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
+Start and enable the systemd unit file to keep it running:
 
 ```sh
-systemctl daemon-reload   # Reload service files on diskfi
-systemctl start lisa      # Start
-systemctl enable lisa     # Atuostart on boot
+ln -s /opt/you-cant-download-this-image/lisa.service /etc/systemd/system/lisa.service
+systemctl daemon-reload    # Reload service files on disk
+systemctl start lisa       # Start
+systemctl enable lisa      # Autostart on boot
 ```
 
-For the ssl cert, follow the instructions on Certbot's website.
+Configure caddy:
 
-Finally, something like this can be added to the nginx config:
-
-```
-server {
-    if ($host = www.youcantdownloadthisimage.club) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    if ($host = youcantdownloadthisimage.club) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-    listen 80;
-}
-
-server {
-    listen 443 ssl;
-    root /root/you-cant-download-this-image/public;
-    server_name youcantdownloadthisimage.club www.youcantdownloadthisimage.club;
-    ssl_certificate /etc/letsencrypt/live/youcantdownloadthisimage.club/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/youcantdownloadthisimage.club/privkey.pem; # managed by Certbot
-
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-
-    location / {
-        add_header X-Frame-Options "SAMEORIGIN";
-        add_header Access-Control-Allow-Origin https://youcantdownloadthisimage.club;
-    }
-
-    location /lisa.jpg {
-        proxy_pass              http://localhost:3000;
-        proxy_redirect          http://localhost:3000 https://youcantdownloadthisimage.club;
-    }
-}
+```sh
+mv /etc/caddy/Caddyfile /etc/caddy/Caddyfile.bak    # backup existing Caddyfile
+ln -s /opt/you-cant-download-this-image/Caddyfile /etc/caddy/Caddyfile
+systemctl restart caddy
 ```
 
 </details>
