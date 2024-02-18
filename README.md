@@ -1,6 +1,6 @@
 # You can't download this image
 
-![Site uptime check](https://github.com/radiantly/you-cant-download-this-image/actions/workflows/site.yml/badge.svg)
+![Site status](https://github.com/radiantly/you-cant-download-this-image/actions/workflows/site.yml/badge.svg)
 
 Or can you? Visit https://youcantdownloadthisimage.com/ to give it a go!
 
@@ -16,12 +16,13 @@ make
 
 <details>
 <summary>Full setup</summary>
+
 The following assumes that you have [caddy](https://caddyserver.com/) installed with systemd.
 
 ```sh
 cd /opt                                                                # Navigate to /opt
 git clone https://github.com/radiantly/you-cant-download-this-image    # Clone repository
-chown -R root:caddy you-cant-download-this-image/                      # Set permissions: root owner, caddy group
+chown -R :caddy you-cant-download-this-image/                          # Set dir group to caddy
 cd you-cant-download-this-image && make                                # Build
 ```
 
@@ -47,5 +48,3 @@ systemctl restart caddy
 ## License
 
 MIT
-
-[![Powered by DigitalOcean](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=b907b37883ce&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
